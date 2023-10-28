@@ -1,6 +1,7 @@
 {
   "name": "seligatech",
   "version": "1.0.0",
+  "type": "module",
   "description": "API seligatech",
   "main": "index.js",
   "scripts": {
