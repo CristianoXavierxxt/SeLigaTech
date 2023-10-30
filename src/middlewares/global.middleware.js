@@ -12,7 +12,7 @@ const validId = ( req , res, next ) => {
         next()
         
     }catch(err){
-        res.status(500).send( {message: err.message} )
+        res.status(500).send( { message: err.message } )
     }
 }
 
@@ -31,7 +31,7 @@ const validUser = async ( req , res, next ) => {
         next()
 
     }catch(err){
-        res.status(500).send( {message: err.message} )
+        res.status(500).send( { message: err.message } )
     }
 }
 

@@ -9,15 +9,19 @@ const create = async ( req, res ) => {
             res.status(400).send( { message:"Submits all fields for create post" } )
         }
 
-        const post = await publicationService.createService( { title, text, banner, 
-            user:{ _id:"653d419ff5151d4361ee37ad" } } );
+        const post = await publicationService.createService( { 
+            title, 
+            text, 
+            banner, 
+            user: req.userId
+         } );
 
         if( !post ) {
             return res.status(400).send( { message: "Error creating post" } )
         }
 
         res.status(201).send( { 
-            message: "Post created successfully",
+            message: "Publication created successfully",
             post:{
                 title,
                 text,
