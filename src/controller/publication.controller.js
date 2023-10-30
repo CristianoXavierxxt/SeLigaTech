@@ -1,5 +1,4 @@
-import postService from "../services/post.service.js"
-import { ObjectId } from "mongoose"
+import publicationService from "../services/publication.service.js"
 
 const create = async ( req, res ) => {
     try{
@@ -10,7 +9,7 @@ const create = async ( req, res ) => {
             res.status(400).send( { message:"Submits all fields for create post" } )
         }
 
-        const post = await postService.createService( { title, text, banner, 
+        const post = await publicationService.createService( { title, text, banner, 
             user:{ _id:"653d419ff5151d4361ee37ad" } } );
 
         if( !post ) {
@@ -34,7 +33,7 @@ const create = async ( req, res ) => {
 
 const findAll = async ( req, res ) => {
     try{
-        const posts = await postService.findAllService();
+        const posts = await publicationService.findAllService();
         
         if( posts.length === 0 ) {
             return res.status(400).send( { message: "There are no created posts" } )
