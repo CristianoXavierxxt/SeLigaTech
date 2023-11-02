@@ -7,6 +7,6 @@ const router = Router()
 
 
 router.post("/", authMiddleware.validToken, publicationController.create)
-router.get("/", authMiddleware.validToken, publicationController.findAll)
+router.get("/", publicationController.findAll)
 
 export default router
