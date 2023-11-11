@@ -6,4 +6,6 @@ const findAllService = ( offset, limit ) => Publication.find().sort( { _id: -1 }
 
 const countAllService = () => Publication.countDocuments()
 
-export default { createService, findAllService, countAllService }
+const topService = () => Publication.findOne().sort( { _id: -1 } ).populate("user")
+
+export default { createService, findAllService, countAllService, topService }

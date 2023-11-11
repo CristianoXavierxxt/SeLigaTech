@@ -55,8 +55,11 @@ const findAll = async ( req, res ) => {
         const currentUrl = req.baseUrl
 
         const next = offset + limit
+
         const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null;
+
         const previous = offset - limit < 0 ? null : offset - limit;
+
         const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
         
         if( publications.length === 0 ) {
@@ -76,6 +79,7 @@ const findAll = async ( req, res ) => {
                 banner: item.banner,
                 likes: item.likes,
                 comments: item.comments,
+                date: item.date,
                 name: item.user.name,
                 username: item.user.username,
                 avatar: item.user.avatar,
@@ -83,8 +87,37 @@ const findAll = async ( req, res ) => {
         } )
         
     }catch(err){
-        res.status(500).send( {message: err.message} )
+        res.status(500).send( { message: err.message } )
     }
 }
 
-export default { create, findAll }
+const topPublication = async ( req, res ) => {
+    try{
+        const publications = await publicationService.topService()
+
+        if(!publications){
+            res.status(400).send( { message: "There is no registered publication" } )
+        }
+
+        res.status(200).send( { 
+            publication: {
+                id : publications._id,
+                title: publications.title,
+                text: publications.text,
+                banner: publications.banner,
+                likes: publications.likes,
+                comments: publications.comments,
+                date: publications.date,
+                name: publications.user.name,
+                username: publications.user.username,
+                avatar: publications.user.avatar,
+            }
+        } )
+
+    }catch(err){
+        res.status(500).send( { message: err.message } )
+    }
+
+}
+
+export default { create, findAll, topPublication }
