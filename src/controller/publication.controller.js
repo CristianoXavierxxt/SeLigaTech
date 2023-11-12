@@ -120,4 +120,33 @@ const topPublication = async ( req, res ) => {
 
 }
 
-export default { create, findAll, topPublication }
+const findById = async ( req, res ) =>{
+
+    try{
+        const { id } = req.params
+
+        const publication = await publicationService.findByIdService(id)
+
+        if( !publication ){
+            res.status(400).send( { message: "this publication does not exist" } )
+        }
+
+        res.status(200).send( { 
+            id : publication._id,
+            title: publication.title,
+            text: publication.text,
+            banner: publication.banner,
+            likes: publication.likes,
+            comments: publication.comments,
+            date: publication.date,
+            name: publication.user.name,
+            username: publication.user.username,
+            avatar: publication.user.avatar,
+        } )
+
+    }catch(err){
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+export default { create, findAll, topPublication, findById }

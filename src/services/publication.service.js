@@ -8,4 +8,6 @@ const countAllService = () => Publication.countDocuments()
 
 const topService = () => Publication.findOne().sort( { _id: -1 } ).populate("user")
 
-export default { createService, findAllService, countAllService, topService }
+const findByIdService = (id) => Publication.findById(id).populate("user")
+
+export default { createService, findAllService, countAllService, topService, findByIdService }

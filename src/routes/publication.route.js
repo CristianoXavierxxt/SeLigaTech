@@ -6,8 +6,9 @@ import authMiddleware from "../middlewares/auth.middlewares.js"
 const router = Router()
 
 
-router.post("/", authMiddleware.validToken, publicationController.create )
-router.get("/", publicationController.findAll )
-router.get("/top", publicationController.topPublication )
+router.post( "/", authMiddleware.validToken, publicationController.create )
+router.get( "/", publicationController.findAll )
+router.get( "/top", publicationController.topPublication )
+router.get( "/:id", publicationController.findById )
 
 export default router
