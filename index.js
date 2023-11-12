@@ -17,8 +17,8 @@ const port = process.env.PORT || 3000
 connectDatabase()
 app.use(express.json())
 app.use( "/user", userRoute )
-app.use ( "/auth", authRoute )
-app.use ( "/publication", publicationRoute )
+app.use( "/auth", authRoute )
+app.use( "/publication", publicationRoute )
 
 
 app.listen( port, () => console.log( `Servidor rodando na porta ${port}` ) )

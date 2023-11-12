@@ -96,7 +96,7 @@ const topPublication = async ( req, res ) => {
         const publications = await publicationService.topService()
 
         if(!publications){
-            res.status(400).send( { message: "There is no registered publication" } )
+            return res.status(400).send( { message: "There is no registered publication" } )
         }
 
         res.status(200).send( { 
@@ -125,10 +125,14 @@ const findById = async ( req, res ) =>{
     try{
         const { id } = req.params
 
+        if( !id ){
+            return res.status(400).send( { message: "id not submited" } )
+        }
+
         const publication = await publicationService.findByIdService(id)
 
         if( !publication ){
-            res.status(400).send( { message: "this publication does not exist" } )
+            return res.status(400).send( { message: "this publication does not exist" } )
         }
 
         res.status(200).send( { 
@@ -149,4 +153,45 @@ const findById = async ( req, res ) =>{
     }
 }
 
-export default { create, findAll, topPublication, findById }
+const searchByTitle = async ( req, res ) => {
+    try {
+        const { title } = req.query
+
+        if( !title ){
+            return res.status(400).send( { message: "title not submited" } )
+        }
+
+        const publications = await publicationService.searchByTitleService(title)
+
+        if( publications.length === 0 ){
+
+            return res.status(400).send( { message: "There are not publication with this title" } )
+        }
+
+        res.status(200).send( { 
+            results: publications.map((item) => ({
+                id : item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                date: item.date,
+                name: item.user.name,
+                username: item.user.username,
+                avatar: item.user.avatar,
+            }))
+        } )
+        
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+export default { 
+    create, 
+    findAll, 
+    topPublication, 
+    findById, 
+    searchByTitle 
+}

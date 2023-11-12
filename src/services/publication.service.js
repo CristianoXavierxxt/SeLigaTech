@@ -10,4 +10,17 @@ const topService = () => Publication.findOne().sort( { _id: -1 } ).populate("use
 
 const findByIdService = (id) => Publication.findById(id).populate("user")
 
-export default { createService, findAllService, countAllService, topService, findByIdService }
+const searchByTitleService = (title) => Publication.find( { 
+    title: { 
+        $regex: `${title || ""}`, 
+        $options: "i" }
+ } ).sort( { _id: -1 } ).populate("user")
+
+export default { 
+    createService, 
+    findAllService, 
+    countAllService, 
+    topService, 
+    findByIdService,
+    searchByTitleService
+ }
