@@ -11,7 +11,7 @@ router.get( "/", publicationController.findAll )
 router.get( "/top", publicationController.topPublication )
 router.get( "/search", publicationController.searchByTitle )
 router.get( "/byUser", authMiddleware.validToken, publicationController.userPublications )
-
+router.patch(  "/:id", authMiddleware.validToken, publicationController.update )
 router.get( "/:id", authMiddleware.validToken, publicationController.findById )
 
 export default router

@@ -18,6 +18,10 @@ const searchByTitleService = (title) => Publication.find( {
 
 const userPublicationsService = (id) => Publication.find( { user: id } ).sort( { _id: -1 } ).populate("user")
 
+const updateService = (id, title, text, banner) => 
+Publication.findOneAndUpdate( { _id: id }, { title, text, banner }, { rawResult: true } )
+
+
 export default { 
     createService, 
     findAllService, 
@@ -25,5 +29,6 @@ export default {
     topService, 
     findByIdService,
     searchByTitleService,
-    userPublicationsService
+    userPublicationsService,
+    updateService
  }

@@ -221,11 +221,39 @@ const userPublications = async ( req, res ) =>{
     }
 }
 
+const update = async ( req, res ) => {
+
+    try {
+        const id = req.params
+
+        const { title, text, banner } = req.body
+
+        if( !title && !text && !banner ){
+            return res.status(400).send( { message: "Submit at least one field to the update the post" } )
+        }
+
+        const publication = await publicationService.findByIdService(id)
+
+        if( publication.user._id != req.userId ){
+            return res.status(400).send( { message: "you didn't update this post" } )
+        }
+
+        await publicationService.updateService( id, title, text, banner )
+
+        return res.status(200).send( { message: "post updated successfully" } )
+
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+
 export default { 
     create, 
     findAll, 
     topPublication, 
     findById, 
     searchByTitle,
-    userPublications
+    userPublications,
+    update
 }
