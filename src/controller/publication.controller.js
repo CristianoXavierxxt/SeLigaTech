@@ -169,7 +169,7 @@ const searchByTitle = async ( req, res ) => {
         }
 
         res.status(200).send( { 
-            results: publications.map((item) => ({
+            results: publications.map( (item) => ({
                 id : item._id,
                 title: item.title,
                 text: item.text,
@@ -188,10 +188,44 @@ const searchByTitle = async ( req, res ) => {
     }
 }
 
+const userPublications = async ( req, res ) =>{
+
+    try {
+
+        const id = req.userId
+
+        const publications = await publicationService.userPublicationsService(id)
+
+        if( publications.length === 0 ){
+            return res.status(400).send( { message: "There are no posts for this user" } )
+        }
+
+        res.status(200).send( { 
+            results: publications.map( (item) => ({
+                id : item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                date: item.date,
+                name: item.user.name,
+                username: item.user.username,
+                avatar: item.user.avatar,
+            }))
+        } )
+
+
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
 export default { 
     create, 
     findAll, 
     topPublication, 
     findById, 
-    searchByTitle 
+    searchByTitle,
+    userPublications
 }

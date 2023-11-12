@@ -14,7 +14,9 @@ const searchByTitleService = (title) => Publication.find( {
     title: { 
         $regex: `${title || ""}`, 
         $options: "i" }
- } ).sort( { _id: -1 } ).populate("user")
+} ).sort( { _id: -1 } ).populate("user")
+
+const userPublicationsService = (id) => Publication.find( { user: id } ).sort( { _id: -1 } ).populate("user")
 
 export default { 
     createService, 
@@ -22,5 +24,6 @@ export default {
     countAllService, 
     topService, 
     findByIdService,
-    searchByTitleService
+    searchByTitleService,
+    userPublicationsService
  }
