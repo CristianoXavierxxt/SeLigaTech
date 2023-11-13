@@ -37,30 +37,21 @@ const create = async ( req, res ) => {
 
 const findAll = async ( req, res ) => {
     try{
-        let { limit, offset } = req.query
-        
-        limit = Number( limit )
-        offset = Number( offset )
 
-        if( !limit ){
-            limit = 5
-        }
+        const offset = req.offset
+        const limit = req.limit
+        const next = req.nextU
 
-        if( !offset ){
-            offset = 0
-        }
-
-        const publications = await publicationService.findAllService( offset, limit );
         const total = await publicationService.countAllService()
         const currentUrl = req.baseUrl
 
-        const next = offset + limit
+        const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null
 
-        const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null;
+        const previous = offset - limit < 0 ? null : offset - limit
 
-        const previous = offset - limit < 0 ? null : offset - limit;
+        const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
-        const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
+        const publications = await publicationService.findAllService( offset, limit )
         
         if( publications.length === 0 ) {
             return res.status(400).send( { message: "There are no created publications" } )
@@ -154,14 +145,28 @@ const findById = async ( req, res ) =>{
 }
 
 const searchByTitle = async ( req, res ) => {
+
     try {
+
+        const offset = req.offset
+        const limit = req.limit
+        const next = req.nextU
+
         const { title } = req.query
 
         if( !title ){
             return res.status(400).send( { message: "title not submited" } )
         }
 
-        const publications = await publicationService.searchByTitleService(title)
+        const publications = await publicationService.searchByTitleService( title, offset, limit )
+        const total = await publicationService.countByTitleService(title)
+        const currentUrl = req.baseUrl
+
+        const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null
+
+        const previous = offset - limit < 0 ? null : offset - limit
+
+        const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
         if( publications.length === 0 ){
 
@@ -169,6 +174,11 @@ const searchByTitle = async ( req, res ) => {
         }
 
         res.status(200).send( { 
+            nextUrl,
+            previousUrl,
+            limit,
+            offset,
+            total,
             results: publications.map( (item) => ({
                 id : item._id,
                 title: item.title,
@@ -192,15 +202,32 @@ const userPublications = async ( req, res ) =>{
 
     try {
 
+        const offset = req.offset
+        const limit = req.limit
+        const next = req.nextU
+
         const id = req.userId
 
-        const publications = await publicationService.userPublicationsService(id)
+        const publications = await publicationService.userPublicationsService( id, offset, limit )
+        const total = await publicationService.countByIdService(id)
+        const currentUrl = req.baseUrl
+
+        const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null
+
+        const previous = offset - limit < 0 ? null : offset - limit
+
+        const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
         if( publications.length === 0 ){
             return res.status(400).send( { message: "There are no posts for this user" } )
         }
 
         res.status(200).send( { 
+            nextUrl,
+            previousUrl,
+            limit,
+            offset,
+            total,
             results: publications.map( (item) => ({
                 id : item._id,
                 title: item.title,
@@ -224,7 +251,7 @@ const userPublications = async ( req, res ) =>{
 const update = async ( req, res ) => {
 
     try {
-        const id = req.params
+        const { id } = req.params
 
         const { title, text, banner } = req.body
 
@@ -247,6 +274,26 @@ const update = async ( req, res ) => {
     }
 }
 
+const erase = async ( req, res ) => {
+
+    try {
+        
+        const { id } = req.params
+
+        const publication = await publicationService.findByIdService(id)
+
+        if( publication.user._id != req.userId ){
+            return res.status(400).send( { message: "you didn't delete this post" } )
+        }
+
+        await publicationService.eraseService(id)
+
+        return res.status(200).send( { message: "post deleted successfully" } )
+        
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
 
 export default { 
     create, 
@@ -255,5 +302,6 @@ export default {
     findById, 
     searchByTitle,
     userPublications,
-    update
+    update,
+    erase
 }

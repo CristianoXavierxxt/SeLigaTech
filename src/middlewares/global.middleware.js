@@ -9,7 +9,7 @@ const validId = ( req , res, next ) => {
             return res.status(400).send( { message: "Invalid id" } )
         }
 
-        next()
+        return next()
         
     }catch(err){
         res.status(500).send( { message: err.message } )
@@ -28,11 +28,41 @@ const validUser = async ( req , res, next ) => {
         req.id = id;
         req.user = user;
         
-        next()
+        return next()
 
     }catch(err){
         res.status(500).send( { message: err.message } )
     }
 }
 
-export default { validId, validUser }
+const pagination = ( req, res, next ) => {
+
+    try {
+
+        let { limit, offset } = req.query
+        
+        limit = Number( limit )
+        offset = Number( offset )
+
+        if( !limit ){
+            limit = 5
+        }
+
+        if( !offset ){
+            offset = 0
+        }
+
+        const nextU = offset + limit
+
+        req.limit = limit
+        req.offset = offset
+        req.nextU = nextU
+
+        return next()
+
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+export default { validId, validUser, pagination }
