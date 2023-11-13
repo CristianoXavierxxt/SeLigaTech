@@ -295,6 +295,71 @@ const erase = async ( req, res ) => {
     }
 }
 
+const like = async ( req, res ) => {
+    try {
+        const { id } = req.params
+
+        const userId = req.userId
+
+        const publicationLike = await publicationService.likeService( id, userId )
+
+        if(!publicationLike){
+            await publicationService.deleteLikeService( id, userId )
+            return res.status(200).send( { message: "like removed" } )
+        }
+
+        res.status(200).send( { message: "Like done sucessfully" } )
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+const addComment = async ( req, res ) => {
+    try {
+
+        const { id } = req.params
+
+        const userId = req.userId
+
+        const { commentBody } = req.body
+        
+        if(!commentBody){
+            return res.status(200).send( { message: "write a message to comment" } )
+        }
+
+        await publicationService.addCommentService( id, userId, commentBody )
+
+        res.status(200).send( { message: "Comment sucessfully created" } )
+
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
+const deleteComment = async ( req, res ) => {
+    try {
+        const { idPublication, idComment } = req.params
+
+        const userId = req.userId
+
+        const commentDeleted = await publicationService.deleteCommentService( idPublication, idComment, userId )
+
+        const commentFinder = commentDeleted.comments.find( (comment) => comment.idComment === idComment)
+
+        if(!commentFinder){
+            return res.status(404).send( { message: "Comment not found" } )
+        }
+
+        if( commentFinder.userId != userId ){
+            return res.status(400).send( { message: "You can't delete this comment" } )
+        }
+
+        res.status(200).send( { message: "Comment sucessfully removed" } )
+    } catch (err) {
+        res.status(500).send( { message: err.message } )
+    }
+}
+
 export default { 
     create, 
     findAll, 
@@ -303,5 +368,8 @@ export default {
     searchByTitle,
     userPublications,
     update,
-    erase
+    erase,
+    like,
+    addComment,
+    deleteComment
 }

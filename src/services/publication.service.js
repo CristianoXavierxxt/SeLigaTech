@@ -52,6 +52,30 @@ Publication.findOneAndUpdate(
 
 const eraseService = (id) => Publication.findByIdAndDelete( { _id: id } )
 
+const likeService = ( idNews, userId ) => Publication.findOneAndUpdate( 
+    { _id: idNews,"likes.userId": { $nin:[userId] } }, 
+    { $push: { likes: { userId, created: new Date() } } }
+)
+
+const deleteLikeService = ( idNews, userId ) => Publication.findOneAndDelete(
+    { _id: idNews},
+    { $pull: { likes: { userId } } }
+)
+
+const addCommentService = ( idPublication, userId, commentBody ) => {
+    const idComment = Math.floor( Date.now() * Math.random() ).toString(36)
+
+    return Publication.findOneAndUpdate(
+        { _id: idPublication },
+        { $push: { comments: { idComment, userId, commentBody, createdAt: new Date() } } }
+    )
+}
+
+const deleteCommentService = ( idPublication, idComment, userId ) => Publication.findOneAndDelete(
+    { _id: idPublication },
+    { $pull: { comments: { idComment, userId } } }
+)
+
 export default { 
     createService, 
     findAllService, 
@@ -63,5 +87,9 @@ export default {
     searchByTitleService,
     userPublicationsService,
     updateService,
-    eraseService
+    eraseService,
+    likeService,
+    deleteLikeService,
+    addCommentService,
+    deleteCommentService
  }
