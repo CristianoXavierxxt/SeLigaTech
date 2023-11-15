@@ -57,7 +57,7 @@ const findById = async ( req , res ) => {
 const updateUser = async ( req, res ) => {
 
     try{
-        const { id, user } = req;
+        const { id } = req.id;
 
         const { name, username, email, password, avatar } = req.body
 
