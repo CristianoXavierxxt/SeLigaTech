@@ -1,12 +1,12 @@
 import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
-import connectDatabase from "./src/database/db.js"
+import connectDatabase from "./database/db.js"
 
 
-import userRoute from "./src/routes/user.route.js"
-import authRoute from "./src/routes/auth.route.js"
-import publicationRoute from "./src/routes/publication.route.js"
+import userRoute from "./routes/user.route.js"
+import authRoute from "./routes/auth.route.js"
+import publicationRoute from "./routes/publication.route.js"
 
 
 const app = express()
