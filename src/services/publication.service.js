@@ -43,10 +43,10 @@ const userPublicationsService = ( id, offset, limit ) => Publication.find( { use
 .populate("user")
 
 
-const updateService = (id, title, text, banner) => 
+const updateService = (id, title, text) => 
 Publication.findOneAndUpdate( 
     { _id: id }, 
-    { title, text, banner }, 
+    { title, text }, 
     { rawResult: true } 
 )
 

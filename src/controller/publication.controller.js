@@ -3,16 +3,15 @@ import publicationService from "../services/publication.service.js"
 const create = async ( req, res ) => {
     try{
 
-        const { title, text, banner } = req.body
+        const { title, text } = req.body
 
-        if( !title || !text || !banner ) {
+        if( !title || !text ) {
             res.status(400).send( { message:"Submits all fields for create post" } )
         }
 
         const post = await publicationService.createService( { 
             title, 
             text, 
-            banner, 
             user: req.userId
          } );
 
@@ -24,8 +23,7 @@ const create = async ( req, res ) => {
             message: "Publication created successfully",
             post:{
                 title,
-                text,
-                banner
+                text
             } 
         } )
         
@@ -67,7 +65,6 @@ const findAll = async ( req, res ) => {
                 id : item._id,
                 title: item.title,
                 text: item.text,
-                banner: item.banner,
                 likes: item.likes,
                 comments: item.comments,
                 date: item.date,
@@ -95,7 +92,6 @@ const topPublication = async ( req, res ) => {
                 id : publications._id,
                 title: publications.title,
                 text: publications.text,
-                banner: publications.banner,
                 likes: publications.likes,
                 comments: publications.comments,
                 date: publications.date,
@@ -130,7 +126,6 @@ const findById = async ( req, res ) =>{
             id : publication._id,
             title: publication.title,
             text: publication.text,
-            banner: publication.banner,
             likes: publication.likes,
             comments: publication.comments,
             date: publication.date,
@@ -183,7 +178,6 @@ const searchByTitle = async ( req, res ) => {
                 id : item._id,
                 title: item.title,
                 text: item.text,
-                banner: item.banner,
                 likes: item.likes,
                 comments: item.comments,
                 date: item.date,
@@ -232,7 +226,6 @@ const userPublications = async ( req, res ) =>{
                 id : item._id,
                 title: item.title,
                 text: item.text,
-                banner: item.banner,
                 likes: item.likes,
                 comments: item.comments,
                 date: item.date,
@@ -253,9 +246,9 @@ const update = async ( req, res ) => {
     try {
         const { id } = req.params
 
-        const { title, text, banner } = req.body
+        const { title, text } = req.body
 
-        if( !title && !text && !banner ){
+        if( !title && !text ){
             return res.status(400).send( { message: "Submit at least one field to the update the post" } )
         }
 
@@ -265,7 +258,7 @@ const update = async ( req, res ) => {
             return res.status(400).send( { message: "you didn't update this post" } )
         }
 
-        await publicationService.updateService( id, title, text, banner )
+        await publicationService.updateService( id, title, text )
 
         return res.status(200).send( { message: "post updated successfully" } )
 
