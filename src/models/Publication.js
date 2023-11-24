@@ -9,10 +9,6 @@ const PublicationSchema = new mongoose.Schema( {
         type: String,
         required: true,
     },
-    banner: {
-        type: String,
-        required: true,
-    },
     date: {
         type: Date,
         default: Date.now(),

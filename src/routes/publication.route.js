@@ -7,17 +7,17 @@ import globalMiddleware from "../middlewares/global.middleware.js"
 const router = Router()
 
 
-router.post( "/", authMiddleware.validToken, publicationController.create )
-router.get( "/", globalMiddleware.pagination, publicationController.findAll )
+router.post( "/create", authMiddleware.validToken, publicationController.create )
+router.get( "/getAll", globalMiddleware.pagination, publicationController.findAll )
 router.get( "/top", publicationController.topPublication )
 router.get( "/search", globalMiddleware.pagination, publicationController.searchByTitle )
-router.get( "/byUser", authMiddleware.validToken, globalMiddleware.pagination,
+router.get( "/publicationByUser", authMiddleware.validToken, globalMiddleware.pagination,
 publicationController.userPublications )
 router.patch( "/like/:id", authMiddleware.validToken, publicationController.like )
 router.patch( "/comment/:id", authMiddleware.validToken, publicationController.addComment )
 router.patch( "/comment/:idPublication/:idComment", authMiddleware.validToken, publicationController.deleteComment )
-router.delete( "/:id", authMiddleware.validToken, publicationController.erase )
-router.patch( "/:id", authMiddleware.validToken, publicationController.update )
-router.get( "/:id", authMiddleware.validToken, publicationController.findById )
+router.delete( "/deltePublication/:id", authMiddleware.validToken, publicationController.erase )
+router.patch( "/updatePublication/:id", authMiddleware.validToken, publicationController.update )
+router.get( "findById/:id", authMiddleware.validToken, publicationController.findById )
 
 export default router
