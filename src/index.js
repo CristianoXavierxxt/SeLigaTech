@@ -1,5 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
+import cors from "cors"
 dotenv.config()
 import connectDatabase from "./database/db.js"
 
@@ -13,6 +14,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 connectDatabase()
+app.use(cors({ 
+    origin: 'http://localhost:5173', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, 
+  }));
 app.use(express.json())
 app.use( "/user", userRoute )
 app.use( "/auth", authRoute )
