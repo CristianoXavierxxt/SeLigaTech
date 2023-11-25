@@ -3,10 +3,7 @@ import Publication from "../models/Publication.js"
 const createService = (body) => Publication.create(body)
 
 
-const findAllService = ( offset, limit ) => Publication.find().sort( { _id: -1 } )
-.skip( offset )
-.limit( limit )
-.populate("user")
+const findAllService = ( offset, limit ) => Publication.find().sort( { _id: -1 } ).skip( offset ).limit( limit ).populate("user")
 
 
 const countAllService = () => Publication.countDocuments()
@@ -71,9 +68,9 @@ const addCommentService = ( idPublication, userId, commentBody ) => {
     )
 }
 
-const deleteCommentService = ( idPublication, idComment, userId ) => Publication.findOneAndDelete(
+const deleteCommentService = ( idPublication, idComment, userId ) => Publication.findOneAndUpdate(
     { _id: idPublication },
-    { $pull: { comments: { idComment, userId } } }
+    { $pull: { comments: { idComment, userId } } },
 )
 
 export default { 

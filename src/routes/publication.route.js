@@ -16,8 +16,8 @@ publicationController.userPublications )
 router.patch( "/like/:id", authMiddleware.validToken, publicationController.like )
 router.patch( "/comment/:id", authMiddleware.validToken, publicationController.addComment )
 router.patch( "/comment/:idPublication/:idComment", authMiddleware.validToken, publicationController.deleteComment )
-router.delete( "/deltePublication/:id", authMiddleware.validToken, publicationController.erase )
+router.delete( "/deletePublication/:id", authMiddleware.validToken, publicationController.erase )
 router.patch( "/updatePublication/:id", authMiddleware.validToken, publicationController.update )
-router.get( "findById/:id", authMiddleware.validToken, publicationController.findById )
+router.get( "/findById/:id", authMiddleware.validToken, publicationController.findById )
 
 export default router

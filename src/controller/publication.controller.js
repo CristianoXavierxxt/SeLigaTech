@@ -248,13 +248,15 @@ const update = async ( req, res ) => {
 
         const { title, text } = req.body
 
+        const userId = req.userId
+
         if( !title && !text ){
             return res.status(400).send( { message: "Submit at least one field to the update the post" } )
         }
 
         const publication = await publicationService.findByIdService(id)
 
-        if( publication.user._id != req.userId ){
+        if( publication.user._id.toString() != userId.toString() ){
             return res.status(400).send( { message: "you didn't update this post" } )
         }
 
@@ -272,10 +274,11 @@ const erase = async ( req, res ) => {
     try {
         
         const { id } = req.params
+        const userId = req.userId
 
         const publication = await publicationService.findByIdService(id)
 
-        if( publication.user._id != req.userId ){
+        if( publication.user._id.toString() !== userId.toString() ){
             return res.status(400).send( { message: "you didn't delete this post" } )
         }
 
@@ -337,13 +340,15 @@ const deleteComment = async ( req, res ) => {
 
         const commentDeleted = await publicationService.deleteCommentService( idPublication, idComment, userId )
 
-        const commentFinder = commentDeleted.comments.find( (comment) => comment.idComment === idComment)
+        const commentFinder = commentDeleted.comments.find( (comment) => comment.idComment ===idComment)
 
         if(!commentFinder){
             return res.status(404).send( { message: "Comment not found" } )
         }
 
-        if( commentFinder.userId != userId ){
+        console.log(commentFinder.userId, userId)
+
+        if( commentFinder.userId.toString() !== userId.toString() ){
             return res.status(400).send( { message: "You can't delete this comment" } )
         }
 
