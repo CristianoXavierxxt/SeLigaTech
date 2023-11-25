@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import JsonWebToken from "jsonwebtoken"
-import userService from "../services/user.service.js"
+import userRepositori from "../repositores/user.repositores.js"
 dotenv.config()
 
 const validToken = async ( req, res, next ) => {
@@ -29,7 +29,7 @@ const validToken = async ( req, res, next ) => {
                 return res.status(401).send( { message: "token invalid" } )
             }
 
-            const user = await userService.findByIdService( decoded.id )
+            const user = await userRepositori.findByIdRepositore( decoded.id )
 
             if( !user || !user.id ){
                 return res.status(401).send( { message: "token invalid" } )

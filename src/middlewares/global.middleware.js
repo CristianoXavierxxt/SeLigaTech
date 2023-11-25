@@ -1,5 +1,5 @@
 import mongoose from "mongoose" 
-import userService from "../services/user.service.js" 
+import userRepositores from "../repositores/user.repositores.js" 
 
 const validId = ( req , res, next ) => {
     try{
@@ -19,7 +19,7 @@ const validId = ( req , res, next ) => {
 const validUser = async ( req , res, next ) => {
     try{
         const id = req.params.id
-        const user = await userService.findByIdService( id )
+        const user = await userRepositores.findByIdRepositore( id )
 
         if( !user ) {
             return res.status(400).send( { message: "User not found" } )

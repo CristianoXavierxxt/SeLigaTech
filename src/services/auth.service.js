@@ -1,9 +1,20 @@
-import User from "../models/User.js" 
-import JsonWebToken from "jsonwebtoken"
+import bcrypt from "bcrypt" 
+import authRepositore from "../repositores/auth.repositores.js"
 
-const findUser = (email) => User.findOne( { email: email } ).select( "+password" )
+const loginService = async ( email, password ) => {
 
-const generateToken = (id) => JsonWebToken.sign( { id: id }, process.env.SECRET_JWT, { expiresIn: 86400 } )
+    const user = await authRepositore.findUser( email )
 
+    if( !user ) throw new Error( "Email or password incorrect" )
+   
+    const passwordIsValued = await bcrypt.compare( password, user.password )
 
-export default { findUser, generateToken }
+    if( !passwordIsValued ) throw new Error( "Email or password incorrect" )
+
+    const token = authRepositore.generateToken( user.id )
+
+    return { token } 
+
+}
+
+export default { loginService }
