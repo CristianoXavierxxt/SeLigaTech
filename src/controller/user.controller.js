@@ -4,17 +4,9 @@ const createUser = async ( req, res ) => {
     try{
         const body = req.body
 
-        const user = await userService.createUserService( body );
+        const token = await userService.createUserService( body );
 
-        res.status(201).send( { 
-            message: "User created successfully",
-            user:{
-                name: user.user.name,
-                username: user.user.username,
-                email: user.user.email,
-                avatar: user.user.avatar
-            } 
-        } )
+        res.status(201).send( token )
     }catch(err){
         res.status(500).send( {message: err.message} )
     }

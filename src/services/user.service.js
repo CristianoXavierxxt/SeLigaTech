@@ -10,11 +10,11 @@ const createUserService = async ( body ) => {
 
     if(foundUser) throw new Error( "User already exist " )
         
-    const user = await userRepositores.createRepositore( body );
+    const user = await userRepositores.createRepositore( name, username, email, password, avatar );
 
     if( !user ) throw new Error( "Error creating user" )
 
-    const token = await authRepositore.generateToken( user.id )
+    const token = authRepositore.generateToken( user.id )
 
     return token
 };
