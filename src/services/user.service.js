@@ -13,15 +13,9 @@ const createUserService = async ( body ) => {
 
     if( !user ) throw new Error( "Error creating user" )
 
-    return { 
-        message: "User created successfully",
-        user:{
-            name,
-            username,
-            email,
-            avatar
-        } 
-    } 
+    const token = await authRepositore.generateToken( user.id )
+
+    return token
 };
 
 const findAllService = async () => {
