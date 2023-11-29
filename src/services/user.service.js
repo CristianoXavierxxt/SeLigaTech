@@ -1,4 +1,5 @@
 import userRepositores from "../repositores/user.repositores.js"
+import authRepositore from "../repositores/auth.repositores.js"
 
 const createUserService = async ( body ) => {
     const { name, username, email, password, avatar } = body
