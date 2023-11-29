@@ -1,12 +1,6 @@
 import User from "../models/User.js" 
 
-const createRepositore = ( name, username, email, password, avatar ) => User.create( 
-    name, 
-    username, 
-    email, 
-    password, 
-    avatar 
-)
+const createRepositore = ( body ) => User.create( body )
 
 const findByEmailRepositore = (email) => User.findOne( 
     { email: email } 
