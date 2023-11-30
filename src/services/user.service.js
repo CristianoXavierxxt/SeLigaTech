@@ -1,5 +1,6 @@
 import userRepositores from "../repositores/user.repositores.js"
 import authRepositore from "../repositores/auth.repositores.js"
+import bcrypt from "bcrypt"
 
 const createUserService = async ( body ) => {
     const { name, username, email, password, avatar } = body
@@ -48,7 +49,7 @@ const findByIdService = async( userIdParam, userIdLogged ) => {
 
 const updateUserSercice = async ( userId, userIdLogged, body ) => {
 
-  const { name, username, email, password, avatar } = body
+  let { name, username, email, password, avatar } = body
 
   if( !name && !username &&  !email &&  !password && !avatar ) throw new Error( "Submits at least one field for update" )
 

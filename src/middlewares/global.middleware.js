@@ -1,5 +1,4 @@
 import mongoose from "mongoose" 
-import userRepositores from "../repositores/user.repositores.js" 
 
 const validId = ( req , res, next ) => {
     try{
