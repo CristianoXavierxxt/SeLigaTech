@@ -28,6 +28,24 @@ const findAllService = async () => {
     return users 
 }
 
+const findByIdService = async( userIdParam, userIdLogged ) => {
+    let idParam;
+    if (!userIdParam) {
+      userIdParam = userIdLogged;
+      idParam = userIdParam;
+    } else {
+      idParam = userIdParam;
+    }
+    if (!idParam)
+      throw new Error("Send an id in the parameters to search for the user");
+  
+    const user = await userRepositores.findByIdRepositore(idParam);
+  
+    if (!user) throw new Error("User not found");
+  
+    return user;
+}
+
 const updateUserSercice = async ( userId, body ) => {
     const { id } = userId;
 
@@ -47,4 +65,4 @@ const updateUserSercice = async ( userId, body ) => {
     return { message: "User successfully update" } 
 }
 
-export default { createUserService, findAllService, updateUserSercice }
+export default { createUserService, findAllService, findByIdService, updateUserSercice }

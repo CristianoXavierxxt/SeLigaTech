@@ -26,7 +26,10 @@ const findAll = async ( req, res ) => {
 
 const findById = async ( req , res ) => {
     try{
-        const user = req.user
+        const user = await userService.findByIdService( 
+            req.params.id,
+            req.userId 
+        )
 
         res.status(200).send( user )
     }catch(err){

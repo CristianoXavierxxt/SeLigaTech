@@ -1,48 +1,38 @@
 import dotenv from "dotenv"
-import JsonWebToken from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import userRepositori from "../repositores/user.repositores.js"
 dotenv.config()
 
-const validToken = async ( req, res, next ) => {
+const validToken = async (req, res, next) => {
     try {
-        
-        const { authorization } = req.headers
 
-        if( !authorization ) {
-            return res.status(401).send( { message: "token invalid" } )
-        }
+        const authHeader = req.headers.authorization;
+        if (!authHeader)
+            return res.status(401).send({ message: "The token was not informed!" });
 
-        const parts = authorization.split(" ")
+        const parts = authHeader.split(" "); /* ["Bearer", "asdasdasdadsadasd"] */
+        if (parts.length !== 2)
+            return res.status(401).send({ message: "Invalid token!" });
 
-        if( parts.length !== 2 ){
-            return res.status(401).send( { message: "token invalid" } )
-        }
+        const [scheme, token] = parts;
 
-        const [ schema, token ] = parts
+        if (!/^Bearer$/i.test(scheme))
+            return res.status(401).send({ message: "Malformatted Token!" });
 
-        if( schema !== "Bearer" || !token  ){
-            return res.status(401).send( { message: "token invalid" } )
-        }
+        jwt.verify(token, process.env.SECRET_JWT, async (err, decoded) => {
+            if (err) return res.status(401).send({ message: "Invalid token!" });
 
-        JsonWebToken.verify( token, process.env.SECRET_JWT, async ( error, decoded ) => {
-            if(error){
-                return res.status(401).send( { message: "token invalid" } )
-            }
+            const user = await userRepositori.findByIdRepositore(decoded.id);
+            if (!user || !user.id)
+                return res.status(401).send({ message: "Invalid token!" });
 
-            const user = await userRepositori.findByIdRepositore( decoded.id )
+            req.userId = user.id;
 
-            if( !user || !user.id ){
-                return res.status(401).send( { message: "token invalid" } )
-            }
-
-            req.userId = user._id
-
-            return next()
-        } )
-
+            return next();
+        })
 
     } catch (err) {
-        res.status(500).send( { message: err.message } )
+        res.status(500).send({ message: err.message })
     }
 }
 
