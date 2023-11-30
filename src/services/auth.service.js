@@ -13,7 +13,7 @@ const loginService = async ( email, password ) => {
 
     const token = authRepositore.generateToken( user.id )
 
-    return { token } 
+    return token  
 
 }
 
