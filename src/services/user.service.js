@@ -46,23 +46,28 @@ const findByIdService = async( userIdParam, userIdLogged ) => {
     return user;
 }
 
-const updateUserSercice = async ( userId, body ) => {
-    const { id } = userId;
+const updateUserSercice = async ( userId, userIdLogged, body ) => {
 
-    const { name, username, email, password, avatar } = body
+  const { name, username, email, password, avatar } = body
 
-    if( !name && !username &&  !email &&  !password && !avatar ) throw new Error( "Submits at least one field for update" )
+  if( !name && !username &&  !email &&  !password && !avatar ) throw new Error( "Submits at least one field for update" )
 
-    await userRepositores.updateUserRepositore( 
-        id,
-        name,
-        username,
-        email,
-        password,
-        avatar
-    )
+  const user = await userRepositores.findByIdRepositore(userId);
 
-    return { message: "User successfully update" } 
+  if (user._id != userIdLogged) throw new Error("You cannot update this user");
+
+  if (password) password = await bcrypt.hash(password, 10);
+
+  await userRepositores.updateUserRepositore( 
+    userId,
+    name,
+    username,
+    email,
+    password,
+    avatar
+  )
+
+  return { message: "User successfully update" } 
 }
 
 export default { createUserService, findAllService, findByIdService, updateUserSercice }

@@ -16,8 +16,7 @@ userController.findById
 
 router.patch( "/updateUser/:id", 
 authMiddleware.validToken, 
-userMiddlewares.validId, 
-userMiddlewares.validUser, 
+userMiddlewares.validId,
 userController.updateUser 
 )
 

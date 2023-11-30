@@ -40,11 +40,13 @@ const findById = async ( req , res ) => {
 const updateUser = async ( req, res ) => {
 
     try{
-        const id = req.id
+
+        const { id: userId } = req.params;
+        const userIdLogged = req.userId;
 
         const body = req.body
 
-        const response = await userService.updateUserSercice( id, body )
+        const response = await userService.updateUserSercice( userId, userIdLogged, body )
 
         res.status(200).send( response )
     }catch(err){
