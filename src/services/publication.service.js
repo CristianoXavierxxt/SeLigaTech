@@ -41,6 +41,8 @@ const findAllService = async (offset, limit, next, baseUrl) => {
     if (publications.length === 0) throw new Error("There are no created publications")
 
 
+    publications.shift()
+
     return {
         nextUrl,
         previousUrl,
