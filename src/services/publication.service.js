@@ -210,7 +210,7 @@ const likeService = async (publicationId, userId) => {
 
     if (!publicationLike) {
         await publicationRepositores.deleteLikeRepositore(publicationId, userId)
-        throw new Error( "like removed" )
+        return { message: "like removed" }
     }
 
     return { message: "Like done sucessfully" }
