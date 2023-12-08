@@ -217,10 +217,11 @@ const likeService = async (publicationId, userId) => {
 }
 
 const addCommentService = async (publicationId, userId, body) => {
+    const {commentBody} = body
 
     if (!body) throw new Error("write a message to comment")
 
-    await publicationRepositores.addCommentRepositore(publicationId, userId, body)
+    await publicationRepositores.addCommentRepositore(publicationId, userId, commentBody)
 
     return { message: "Comment sucessfully created" }
 }
